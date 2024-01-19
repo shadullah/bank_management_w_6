@@ -18,7 +18,7 @@ class Transactionform(forms.ModelForm):
         self.instance.balance_after_transaction = self.account.balance
         return super().save()
     
-class Depostieform(Transactionform):
+class Depositform(Transactionform):
     def clean_amount(self): # amount field ke filter korbe
         min_depo_amount=100
         amount = self.cleaned_data.get('amount')
@@ -52,7 +52,7 @@ class WithdrawForm(Transactionform):
         
         return amount
     
-class LoanRegForm(Transactionform):
+class LoanReqForm(Transactionform):
     def clean_amount(self):
         amount = self.cleaned_data.get('amount')
     
