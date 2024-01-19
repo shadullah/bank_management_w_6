@@ -8,7 +8,7 @@ class Transactionform(forms.ModelForm):
         fields = ['amount', 'transaction_type']
 
     def __init__(self, *args, **kwargs):
-        self.account = kwargs.pop('account')
+        self.account = kwargs.pop('account') # ekhane pop ba get akta dilei hobe..
         super.__init__(*args, **kwargs)
         self.fields['transaction_type'].disabled = True 
         self.fields['transaction_type'].widget = forms.HiddenInput() 
@@ -19,7 +19,7 @@ class Transactionform(forms.ModelForm):
         return super().save()
     
 class Depostieform(Transactionform):
-    def clean_amount(self):
+    def clean_amount(self): # amount field ke filter korbe
         min_depo_amount=100
         amount = self.cleaned_data.get('amount')
         if amount < min_depo_amount:
