@@ -46,3 +46,23 @@ class depostieView(TransactionCreateMix):
 
         messages.success(self.request, f"{amount}$ was deposited to your account successfully")
         return super().form_valid(form)
+
+
+class WithdrawView(TransactionCreateMix):
+    form_class = WithdrawForm
+    title = "Withdraw"
+
+    def get_initial(self):
+        initial = {'transaction_type': WITHDRAW}
+        return initial
+    
+    def form_valid(self,form):
+        amount = form.cleaned_data.get('amount')
+        account = self.request.user.account
+        account.balance -= amount
+        account.save(
+            update_fields = ['balance']
+        )
+
+        messages.success(self.request, f"{amount}$ was WITHDRAWED from your account successfully")
+        return super().form_valid(form)
