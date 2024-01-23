@@ -9,7 +9,7 @@ class Transactionform(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.account = kwargs.pop('account') # ekhane pop ba get akta dilei hobe..
-        super.__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['transaction_type'].disabled = True 
         self.fields['transaction_type'].widget = forms.HiddenInput() 
 
@@ -33,7 +33,7 @@ class WithdrawForm(Transactionform):
         account = self.account
         min_withdraw_amount = 500
         max_withdrw = 20000
-        balance = self.balance
+        balance = account.balance
         amount = self.cleaned_data.get('amount')
         if amount < min_withdraw_amount:
             raise forms.ValidationError(

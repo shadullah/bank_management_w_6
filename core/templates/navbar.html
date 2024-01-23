@@ -24,25 +24,25 @@
     {% if request.user.is_authenticated %}
     <div class="text-md lg:flex-grow">
       <a
-        href=""
+        href="{% url 'report' %}"
         class="block mt-4 lg:inline-block lg:mt-0 text-blue-900 hover:text-red-900 hover:font-black mr-4"
       >
         Report
       </a>
       <a
-        href=""
+        href="{% url 'deposit' %}"
         class="block mt-4 lg:inline-block lg:mt-0 text-blue-900 hover:text-red-900 hover:font-black mr-4"
       >
         Deposit
       </a>
       <a
-        href=""
+        href="{% url 'withdraw' %}"
         class="block mt-4 lg:inline-block lg:mt-0 text-blue-900 hover:text-red-900 hover:font-black mr-4"
       >
         Withdraw
       </a>
       <a
-        href=""
+        href="{% url 'loan_request' %}"
         class="block mt-4 lg:inline-block lg:mt-0 text-blue-900 hover:text-red-900 hover:font-black mr-4"
       >
         Loan Request

@@ -1,7 +1,7 @@
 from typing import Any
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect, get_object_or_404
 from django.views.generic import CreateView,ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Transaction
@@ -9,27 +9,32 @@ from .forms import Depositform, WithdrawForm, LoanReqForm
 from .constants import DEPOSIT,WITHDRAW,LOAN,LOAN_PAID
 from django.contrib import messages
 from datetime import datetime
-from django.db import Sum
+from django.db.models import Sum
+from django.views import View
+from django.urls import reverse_lazy
+
 # Create your views here.
 
 class TransactionCreateMix(LoginRequiredMixin,CreateView):
-    template_name = ''
+    template_name = 'transactions/transaction_form.html'
     model = Transaction
     title = ''
-    success_url= ''
+    success_url= reverse_lazy('deposit')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update({
-            'account':self.request.user.account,
+            'account': self.request.user.account
         })
         return kwargs
     
-    def get_context_data(self, **kwargs: Any):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) # template e context data pass kora
         context.update({
-            'title': self.title 
+            'title': self.title
         })
+
+        return context
 
 class depostieView(TransactionCreateMix):
     form_class = Depositform
@@ -72,7 +77,7 @@ class WithdrawView(TransactionCreateMix):
     
 class LoanReqView(TransactionCreateMix):
     form_class = LoanReqForm
-    title = "request for Loan"
+    title = "Request for Loan"
 
     def get_initial(self):
         initial = {'transaction_type': LOAN}
@@ -122,3 +127,29 @@ class TransactionReportView(LoginRequiredMixin, ListView):
         })
         return context
     
+class PayLoanView(LoginRequiredMixin, View):
+    def get(self, request, loan_id):
+        loan = get_object_or_404(Transaction, id = loan_id)
+
+        if loan.loan_approve:
+            user_account = loan.account
+            if loan.amount < user_account.balance:
+                user_account.balance -= loan.amount
+                loan.balance_after_transaction = user_account.balance
+                user_account.save()
+                loan.transaction_type = LOAN_PAID
+                loan.save()
+                return redirect
+            else:
+                messages.error(self.request, f"loan amount is greater than available balance")
+                return redirect
+            
+class LoanListView(LoginRequiredMixin, ListView):
+    model = Transaction
+    template_name = ""
+    context_object_name = "loans"
+
+    def get_queryset(self):
+        user_account = self.request.user.account
+        querySet = Transaction.objects.filter(account = user_account, transaction_type = LOAN)
+        return querySet
