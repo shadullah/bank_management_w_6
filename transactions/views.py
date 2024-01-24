@@ -77,7 +77,7 @@ class WithdrawView(TransactionCreateMix):
     
 class LoanReqView(TransactionCreateMix):
     form_class = LoanReqForm
-    title = "Request for Loan"
+    title = "Request For Loan"
 
     def get_initial(self):
         initial = {'transaction_type': LOAN}

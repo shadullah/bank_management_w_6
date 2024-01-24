@@ -1,5 +1,6 @@
-{% extends 'base.html' %} {% block head_title %}{{ title }}{% endblock %} {%
-block content %}
+{% extends 'base.html' %} 
+{% block head_title %}{{ title }}{% endblock %} 
+{% block content %}
 <div class="my-10 py-3 px-4 bg-white rounded-xl shadow-md">
   <h1 class="font-bold text-3xl text-center pb-5 pt-2">Loan Report</h1>
   <hr />
@@ -19,7 +20,9 @@ block content %}
     <tbody>
       {% for loan in loans %}
       <tr class="border-b dark:border-neutral-500">
-        <td class="px-4 py-2">{{ loan.id }}</td>
+        <td class="px-4 py-2">
+         {{ loan.id }}
+        </td>
         <td class="px-4 py-3 text-s border">
           <span
             class="px-2 py-1 font-bold leading-tight rounded-sm text-green-700 bg-green-100"
@@ -27,14 +30,12 @@ block content %}
             {{ loan.amount }}
           </span>
         </td>
-        <td class="px-4 py-2">{{ loan.loan_approve }}</td>
+        <td class="px-4 py-2">
+          {{ loan.loan_approve }}
+        </td>
         <td class="px-4 py-2">
           {% if loan.loan_approve %}
-          <a
-            class="font-bold bg-red-900 text-white hover:text-blue-900 hover:bg-white border border-blue-900 font-bold px-4 py-2 rounded-lg"
-            href='{% url "pay" loan.id %}'
-            >Pay</a
-          >
+          <a class="font-bold bg-red-900 text-white hover:text-blue-900 hover:bg-white border border-blue-900 font-bold px-4 py-2 rounded-lg" href='{% url "loan_pay" loan.id %}'>Pay</a>
           {% else %}
           <p class="font-bold text-red-700 bg-red-100">Loan Pending</p>
           {% endif %}
