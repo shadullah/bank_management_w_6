@@ -7,8 +7,10 @@ charset-normalizer
 click
 colorama
 cookiecutter
+crispy-bootstrap5
 crispy-tailwind
 distlib
+dj-database-url
 Django
 django-appconf
 django-browser-reload
@@ -50,6 +52,7 @@ six
 sqlparse
 text-unidecode
 types-python-dateutil
+typing_extensions
 tzdata
 urllib3
 virtualenv
